@@ -18,6 +18,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import Pagination from "../../components/Pagination";
+import DeleteIcon from "@mui/icons-material/Delete";
 import CrudModal from "../../components/CrudModal";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -60,7 +61,7 @@ export default function InvoicesPage() {
   const [showFilter, setShowFilter] = useState(false);
 
   // Filters
-  const [status, setStatus] = useState<number | undefined>(undefined);
+  const [status, setStatus] = useState<number | string>("");
   const [entity, setEntity] = useState("");
   const [merchant, setMerchant] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -86,19 +87,24 @@ export default function InvoicesPage() {
     try {
       console.log("Fetching invoices...");
       const res = await api.get("/invoices");
-      setList(res.data);
-      console.log(res.data);
-    } catch {
+      console.log("Invoices response:", res.data);
+      setList(Array.isArray(res.data) ? res.data : []);
+    } catch (error) {
+      console.error("Error fetching invoices:", error);
       enqueueSnackbar("Failed to load invoices", { variant: "error" });
+      setList([]); // Set empty array on error
     }
   };
 
   const fetchEntities = async () => {
     try {
       const res = await api.get("/entities");
-      setEntities(res.data);
-    } catch {
+      console.log("Entities response:", res.data);
+      setEntities(Array.isArray(res.data) ? res.data : []);
+    } catch (error) {
+      console.error("Error fetching entities:", error);
       enqueueSnackbar("Failed to load entities", { variant: "error" });
+      setEntities([]); // Set empty array on error
     }
   };
 
@@ -158,7 +164,7 @@ export default function InvoicesPage() {
   // 🔍 Filtered list
   const filteredList = useMemo(() => {
     return list
-      .filter((i) => (status ? i.status === status : true))
+      .filter((i) => (status && status !== "" ? i.status === Number(status) : true))
       .filter((i) => (entity ? String(i.revenueEntityId) === entity : true))
       .filter((i) =>
         merchant ? String(i.revenueEntityId) === merchant : true
@@ -298,6 +304,7 @@ export default function InvoicesPage() {
               <TableCell>Due Date</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Notes</TableCell>
+              {canEdit && <TableCell align="center">Actions</TableCell>}
             </TableRow>
           </TableHead>
 
@@ -310,6 +317,18 @@ export default function InvoicesPage() {
                 <TableCell>{inv.dueDate}</TableCell>
                 <TableCell>{GetInvoiceStatusDescription(inv.status)}</TableCell>
                 <TableCell>{inv.notes}</TableCell>
+                {canEdit && (
+                  <TableCell align="center">
+                    <IconButton 
+                      size="small" 
+                      color="error" 
+                      onClick={() => remove(inv.id)}
+                      title="Delete Invoice"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

@@ -11,6 +11,7 @@ import StorefrontIcon from '@mui/icons-material/Storefront';
 import WalletIcon from '@mui/icons-material/Wallet';
 import FileCopyIcon from '@mui/icons-material/FileCopy';
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import { useAuth } from '../auth/AuthProvider'
 
 export default function Sidebar() {
@@ -29,6 +30,7 @@ export default function Sidebar() {
          {/* <ListItemButton onClick={() => navigate('/Wallets')}><ListItemIcon><WalletIcon sx={{ color: '#fff' }} /></ListItemIcon><ListItemText primary="Wallet" /></ListItemButton> */}
         <ListItemButton onClick={() => navigate('/invoices')}><ListItemIcon><FileCopyIcon sx={{ color: '#fff' }} /></ListItemIcon><ListItemText primary="Invoice" /></ListItemButton>
         <ListItemButton onClick={() => navigate('/receipts')}><ListItemIcon><ReceiptIcon sx={{ color: '#fff' }} /></ListItemIcon><ListItemText primary="Payments" /></ListItemButton>
+        <ListItemButton onClick={() => navigate('/operations')}><ListItemIcon><SettingsApplicationsIcon sx={{ color: '#fff' }} /></ListItemIcon><ListItemText primary="Operations" /></ListItemButton>
         <ListItemButton onClick={() => navigate('/reports')}><ListItemIcon><AccountTreeIcon sx={{ color: '#fff' }} /></ListItemIcon><ListItemText primary="Reports" /></ListItemButton>
         
       </List>

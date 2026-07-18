@@ -19,10 +19,12 @@ import MerchantsPage from './pages/merchants/MerchantsPage'
 import TaskforcePage from './pages/taskforce/TaskforcePage'
 import "./App.css";
 import InvoicePage from './pages/Invoices/InvoicePage';
+import DeleteInvoicePage from './pages/Invoices/DeleteInvoicePage';
 import { UsersDashboard } from './pages/non-admin/UsersDashboard';
 import  ServiceProviderPage  from './pages/serviceProvider/ServiceProviderPage';
 import Landing from './pages/Landing';
 import SignIn from './pages/SignIn';
+import OperationsPage from './pages/OperationsPage';
 
 export default function App() {
   const { mode } = useThemeMode()
@@ -39,10 +41,12 @@ export default function App() {
         <Route path="/revenue-heads" element={<PrivateRoute><RevenueHeads /></PrivateRoute>} />
         <Route path="/receipts" element={<PrivateRoute><ReceiptsPage /></PrivateRoute>} />
         <Route path="/invoices" element={<PrivateRoute><InvoicesPage /></PrivateRoute>} />
+        <Route path="/invoices/delete" element={<PrivateRoute><DeleteInvoicePage /></PrivateRoute>} />
         <Route path="/wallets" element={<PrivateRoute><WalletsPage /></PrivateRoute>} />
         <Route path="/merchants" element={<PrivateRoute><MerchantsPage /></PrivateRoute>} />
         <Route path="/sub-revenue-heads" element={<PrivateRoute><SubRevenueHeads /></PrivateRoute>} />
         <Route path="/taskforce" element={<PrivateRoute><TaskforcePage /></PrivateRoute>} />
+        <Route path="/operations" element={<PrivateRoute><OperationsPage /></PrivateRoute>} />
         <Route path="/reports" element={<PrivateRoute><Reports /></PrivateRoute>} />
         <Route path="/invoice/invoice-page" element={<PrivateRoute><InvoicePage /></PrivateRoute>} />
         <Route path="/users-dashboard" element={<PrivateRoute><UsersDashboard /></PrivateRoute>} />

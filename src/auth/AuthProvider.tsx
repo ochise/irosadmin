@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import api, { setAuthToken } from '../utils/api'
-import jwt_decode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 type User = { id: number, username: string, role: string, profiles:any } | null
 const AuthContext = createContext({ user: null as User, login: async (u: string, p: string) => '', logout: () => { } })
@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const token = localStorage.getItem('iros_token')
     if (token) {
       setAuthToken(token); 
-      try { const decoded: any = jwt_decode(token); 
+      try { const decoded: any = jwtDecode(token); 
         setUser({ id: decoded.id || 0, username: decoded.unique_name || decoded.name || decoded.sub || 'user', role: decoded['role'] || decoded.role || 'Agent', profiles: decoded['profiles'] || [] }) } catch { }
     }
   }, [])
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem('iros_token', token)
     setAuthToken(token)
     try {
-      const decoded: any = jwt_decode(token);    
+      const decoded: any = jwtDecode(token);    
       setUser({
         id: decoded.id || 0, username: decoded.unique_name ||
           decoded.name || decoded.sub || username, role: decoded['role'] ||
