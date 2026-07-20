@@ -474,39 +474,41 @@ export default function DeleteInvoicePage() {
   });
 
   // Search for invoice before deletion
-  const searchInvoice = async (invoiceNumber: string) => {
-    try {
-      setLoading(true);
-      setSearchError('');
-      setInvoiceDetails(null);
+const searchInvoice = async (invoiceNumber: string) => {
+  try {
+    setLoading(true);
+    setSearchError('');
+    setInvoiceDetails(null);
 
-      // Search for the invoice using the invoices endpoint
-      const response = await api.get(`/invoices`);
+    // Use the specific by-number endpoint
+    const response = await api.get(`/invoices/by-number/${invoiceNumber}`);
 
-      // Find the invoice by invoice number
-      const invoice = response.data.find(
-        (inv: any) => inv.invoiceNumber === invoiceNumber
-      );
-
-      if (invoice) {
-        setInvoiceDetails(invoice);
-        return true;
-      } else {
-        setSearchError('Invoice not found');
-        return false;
-      }
-    } catch (error: any) {
+    if (response.data) {
+      setInvoiceDetails(response.data);
+      return true;
+    } else {
+      setSearchError('Invoice not found');
+      return false;
+    }
+  } catch (error: any) {
+    // Handle 404 specifically (invoice not found)
+    if (error?.response?.status === 404) {
+      setSearchError('Invoice not found');
+      enqueueSnackbar('Invoice not found', { variant: 'error' });
+    } else {
       const errorMessage =
         error?.response?.data?.message ||
         error?.response?.data ||
         'Failed to search invoice';
       setSearchError(errorMessage);
       enqueueSnackbar(errorMessage, { variant: 'error' });
-      return false;
-    } finally {
-      setLoading(false);
     }
-  };
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // Handle form submission - opens confirmation dialog
   const onSubmit = async (data: DeleteInvoiceForm) => {
